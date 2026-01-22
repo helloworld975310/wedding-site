@@ -3,25 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NiXNi | Nikhil & Niyeti</title>
+    <title>NiXNi | The Wedding</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap');
+        /* --- IMPORTS & VARIABLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap');
 
         :root {
-            --gold: #D4AF37;
-            --dark: #1a1a1a;
-            --cream: #f9f9f9;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa8c2c;
+            --black: #0a0a0a;
+            --charcoal: #1c1c1c;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
         
-        /* Typography */
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-        .jazzy-text { font-style: italic; color: var(--gold); }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--black); 
+            color: white; 
+            overflow-x: hidden; 
+            position: relative;
+        }
 
-        /* Hero Section */
+        /* --- ANIMATED BACKGROUNDS --- */
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
+            z-index: -2;
+        }
+
+        .gold-dust {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4af37' fill-opacity='0.1'%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='50' cy='50' r='1.5'/%3E%3Ccircle cx='90' cy='20' r='0.8'/%3E%3Ccircle cx='30' cy='80' r='1.2'/%3E%3C/g%3E%3C/svg%3E");
+            animation: moveDust 60s linear infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes moveDust { from { background-position: 0 0; } to { background-position: 0 -1000px; } }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 2px; text-transform: uppercase; }
+        .cursive { font-family: 'Great Vibes', cursive; color: var(--gold); text-transform: none; font-size: 1.5em; }
+        
+        /* --- FLOATING NOTES (JAZZ VIBES) --- */
+        .floating-notes {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .note {
+            position: absolute;
+            color: var(--gold);
+            opacity: 0.2;
+            animation: floatUp 15s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- HERO SECTION --- */
         .hero {
             height: 100vh;
             display: flex;
@@ -29,121 +83,219 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: radial-gradient(circle, #2a2a2a 0%, #000 100%);
-            color: white;
             padding: 20px;
+            position: relative;
         }
 
-        .hero h1 { font-size: 5rem; letter-spacing: -2px; line-height: 0.9; margin-bottom: 20px; }
-        .hero p { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
-        .scroll-down { margin-top: 50px; animation: bounce 2s infinite; font-size: 2rem; color: var(--gold); cursor: pointer; }
-
-        /* RSVP Section */
-        .rsvp-section {
-            padding: 80px 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
+        .hero-border {
+            border: 1px solid var(--gold);
+            padding: 40px;
+            position: relative;
+            animation: borderPulse 4s infinite alternate;
         }
         
-        .form-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            margin-top: 40px;
-            border: 1px solid var(--gold);
+        .hero h1 { 
+            font-size: 5rem; 
+            line-height: 1; 
+            background: linear-gradient(45deg, var(--gold), #fff, var(--gold));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+            margin: 20px 0;
         }
+
+        .hero p { letter-spacing: 6px; font-size: 1rem; color: #ccc; }
+
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes borderPulse { from { box-shadow: 0 0 10px var(--glass); } to { box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); } }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            font-size: 2rem;
+            color: var(--gold);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* --- RSVP FORM (GLASSMORPHISM) --- */
+        .rsvp-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .form-container {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 4px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container.visible { transform: translateY(0); opacity: 1; }
+
+        /* Golden corner borders for the form */
+        .form-container::before, .form-container::after {
+            content: ''; position: absolute; width: 30px; height: 30px;
+            border: 2px solid var(--gold); transition: 0.5s;
+        }
+        .form-container::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+        .form-container::after { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+        .form-container:hover::before, .form-container:hover::after { width: 95%; height: 95%; }
 
         input, select, textarea {
             width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
             padding: 15px;
             margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            color: white;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
+            transition: 0.3s;
+            outline: none;
         }
+
+        input:focus, select:focus, textarea:focus {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        select option { background: var(--black); color: white; }
 
         button {
-            background: var(--dark);
-            color: white;
+            background: linear-gradient(45deg, var(--gold-dark), var(--gold));
+            color: var(--black);
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
             padding: 15px 40px;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
             margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             transition: 0.3s;
-            border-radius: 50px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
 
-        button:hover { background: var(--gold); transform: translateY(-3px); }
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(45deg, var(--gold), white);
+        }
 
-        /* Footer */
-        footer { padding: 40px; text-align: center; background: var(--dark); color: #555; }
-        
-        /* Utilities */
-        .hidden { display: none; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        /* --- SUCCESS MESSAGE --- */
+        #success-msg h3 { font-size: 1.5rem; color: var(--gold); margin-bottom: 10px; }
+        .success-box { border: 1px solid var(--gold); padding: 20px; margin-top: 20px; animation: fadeIn 1s; }
+
+        /* --- FOOTER --- */
+        footer { padding: 40px; text-align: center; font-size: 0.8rem; color: #666; letter-spacing: 2px; }
+
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 3.5rem; }
+            .hero h1 { font-size: 3rem; }
+            .hero-border { padding: 20px; }
+            .form-container:hover::before, .form-container:hover::after { width: 30px; height: 30px; } /* Disable border animation on mobile */
         }
     </style>
 </head>
 <body>
 
+    <div class="bg-gradient"></div>
+    <div class="gold-dust"></div>
+    
+    <div class="floating-notes" id="notes-container"></div>
+
     <section class="hero">
-        <p>Save The Date</p>
-        <h1>Ni <span class="jazzy-text">X</span> Ni</h1>
-        <p>12 . 12 . 2026</p>
+        <div class="hero-border">
+            <p>Save The Date</p>
+            <h1>Ni <span class="cursive">x</span> Ni</h1>
+            <p>DECEMBER 12 • 2026</p>
+        </div>
         <div class="scroll-down" onclick="document.getElementById('rsvp').scrollIntoView({behavior: 'smooth'})">
             <i class="fas fa-chevron-down"></i>
         </div>
     </section>
 
     <section id="rsvp" class="rsvp-section">
-        <h2>Are you ready to vibe?</h2>
-        <p>Join us for the celebration of a lifetime.</p>
+        <div class="form-container" id="form-card">
+            <h2 style="margin-bottom: 10px;">The Celebration</h2>
+            <p style="color: #aaa; margin-bottom: 30px; font-size: 0.9rem;">JOIN US FOR A NIGHT OF JAZZ & JOY</p>
 
-        <div class="form-box">
-            <form name="submit-to-google-sheet">
-                <input name="Name" type="text" placeholder="Your Name" required>
-                <input name="Email" type="email" placeholder="Your Email" required>
-                
-                <select name="Attending" required>
-                    <option value="" disabled selected>Will you be there?</option>
-                    <option value="Yes">Yes, wouldn't miss it!</option>
-                    <option value="No">No, will celebrate in spirit</option>
-                </select>
+            <div class="form-box">
+                <form name="submit-to-google-sheet">
+                    <input name="Name" type="text" placeholder="YOUR NAME" required autocomplete="off">
+                    <input name="Email" type="email" placeholder="YOUR EMAIL" required autocomplete="off">
+                    
+                    <select name="Attending" required>
+                        <option value="" disabled selected>WILL YOU ATTEND?</option>
+                        <option value="Yes">YES, WITH BELLS ON</option>
+                        <option value="No">NO, SPIRITUALLY PRESENT</option>
+                    </select>
 
-                <input name="Guests" type="number" placeholder="Total Guests (including you)" min="1" value="1">
-                <textarea name="Message" placeholder="Leave a note for the couple..." rows="3"></textarea>
-                
-                <button type="submit">Send RSVP</button>
-            </form>
-            <div id="success-msg" class="hidden" style="margin-top:20px; color: green;">
-                <h3><i class="fas fa-check-circle"></i> Received! See you there.</h3>
-            </div>
-            <div id="loading-msg" class="hidden" style="margin-top:20px; color: var(--gold);">
-                Sending...
+                    <input name="Guests" type="number" placeholder="TOTAL GUESTS" min="1" value="1">
+                    <textarea name="Message" placeholder="A NOTE FOR THE COUPLE..." rows="3"></textarea>
+                    
+                    <button type="submit">Send RSVP</button>
+                </form>
+
+                <div id="loading-msg" class="hidden" style="margin-top:20px; color: var(--gold); letter-spacing: 2px;">
+                    <i class="fas fa-circle-notch fa-spin"></i> SENDING LOVE...
+                </div>
+
+                <div id="success-msg" class="hidden success-box">
+                    <h3><i class="fas fa-glass-cheers"></i> CONFIRMED</h3>
+                    <p>We can't wait to see you.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>Nikhil & Niyeti • 2026</p>
+        <p>NIKHIL & NIYETI • EST 2026</p>
     </footer>
 
     <script>
         // --- CONFIGURATION ---
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbx9cbevZyqf368wxbH5zTE-ywxcL7tZxmpLoSpD63vzfArq-Rg8NusXT2z41n59n-GL/exec'; // PASTE YOUR URL HERE
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx9cbevZyqf368wxbH5zTE-ywxcL7tZxmpLoSpD63vzfArq-Rg8NusXT2z41n59n-GL/exec'; 
         // ---------------------
 
         const form = document.forms['submit-to-google-sheet'];
         const successMsg = document.getElementById('success-msg');
         const loadingMsg = document.getElementById('loading-msg');
+        const formCard = document.getElementById('form-card');
 
+        // 1. Scroll Animation Logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(formCard);
+
+        // 2. Form Submit Logic with Confetti
         form.addEventListener('submit', e => {
             e.preventDefault();
             loadingMsg.classList.remove('hidden');
@@ -153,7 +305,31 @@
                 .then(response => {
                     loadingMsg.classList.add('hidden');
                     successMsg.classList.remove('hidden');
-                    // Reset form logic if needed
+                    
+                    // TRIGGER CONFETTI
+                    var duration = 3000;
+                    var end = Date.now() + duration;
+
+                    (function frame() {
+                        confetti({
+                            particleCount: 5,
+                            angle: 60,
+                            spread: 55,
+                            origin: { x: 0 },
+                            colors: ['#d4af37', '#ffffff']
+                        });
+                        confetti({
+                            particleCount: 5,
+                            angle: 120,
+                            spread: 55,
+                            origin: { x: 1 },
+                            colors: ['#d4af37', '#ffffff']
+                        });
+
+                        if (Date.now() < end) {
+                            requestAnimationFrame(frame);
+                        }
+                    }());
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
@@ -162,6 +338,20 @@
                     alert("Something went wrong. Please try again.");
                 });
         });
+
+        // 3. Generate Floating Music Notes (Jazz BS)
+        const notesContainer = document.getElementById('notes-container');
+        const musicIcons = ['fa-music', 'fa-guitar', 'fa-drum', 'fa-microphone-alt'];
+        
+        for(let i=0; i<15; i++) {
+            let note = document.createElement('i');
+            note.classList.add('fas', musicIcons[Math.floor(Math.random() * musicIcons.length)], 'note');
+            note.style.left = Math.random() * 100 + 'vw';
+            note.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            note.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            note.style.animationDelay = Math.random() * 5 + 's';
+            notesContainer.appendChild(note);
+        }
     </script>
 </body>
 </html>
