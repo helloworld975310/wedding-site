@@ -1,357 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NiXNi | The Wedding</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <style>
-        /* --- IMPORTS & VARIABLES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ni x Ni</title>
 
-        :root {
-            --gold: #d4af37;
-            --gold-light: #f3e5ab;
-            --gold-dark: #aa8c2c;
-            --black: #0a0a0a;
-            --charcoal: #1c1c1c;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background-color: var(--black); 
-            color: white; 
-            overflow-x: hidden; 
-            position: relative;
-        }
+  <style>
+    :root {
+      --sage: #a8b8a3;
+      --sage-dark: #8fa18b;
+      --text: #ffffff;
+      --ink: #222;
+    }
 
-        /* --- ANIMATED BACKGROUNDS --- */
-        .bg-gradient {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
-            z-index: -2;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .gold-dust {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4af37' fill-opacity='0.1'%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='50' cy='50' r='1.5'/%3E%3Ccircle cx='90' cy='20' r='0.8'/%3E%3Ccircle cx='30' cy='80' r='1.2'/%3E%3C/g%3E%3C/svg%3E");
-            animation: moveDust 60s linear infinite;
-            z-index: -1;
-            opacity: 0.5;
-        }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #fff;
+      color: var(--ink);
+      scroll-behavior: smooth;
+    }
 
-        @keyframes moveDust { from { background-position: 0 0; } to { background-position: 0 -1000px; } }
+    /* ---------------- NAV ---------------- */
+    .nav-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      font-size: 28px;
+      cursor: pointer;
+      color: #fff;
+    }
 
-        /* --- TYPOGRAPHY --- */
-        h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 2px; text-transform: uppercase; }
-        .cursive { font-family: 'Great Vibes', cursive; color: var(--gold); text-transform: none; font-size: 1.5em; }
-        
-        /* --- FLOATING NOTES (JAZZ VIBES) --- */
-        .floating-notes {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 0;
-        }
-        .note {
-            position: absolute;
-            color: var(--gold);
-            opacity: 0.2;
-            animation: floatUp 15s linear infinite;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.3; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
+    .nav {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.95);
+      transform: translateX(-100%);
+      transition: 0.4s;
+      padding: 80px 40px;
+      z-index: 999;
+    }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-        }
+    .nav.open { transform: translateX(0); }
 
-        .hero-border {
-            border: 1px solid var(--gold);
-            padding: 40px;
-            position: relative;
-            animation: borderPulse 4s infinite alternate;
-        }
-        
-        .hero h1 { 
-            font-size: 5rem; 
-            line-height: 1; 
-            background: linear-gradient(45deg, var(--gold), #fff, var(--gold));
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 5s linear infinite;
-            margin: 20px 0;
-        }
+    .nav a {
+      display: block;
+      font-size: 20px;
+      margin: 15px 0;
+      color: #444;
+      text-decoration: none;
+      font-weight: 500;
+    }
 
-        .hero p { letter-spacing: 6px; font-size: 1rem; color: #ccc; }
+    /* ---------------- HERO ---------------- */
+    .hero {
+      height: 100vh;
+      background: 
+        linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+        url("82333cc3-ee12-4472-a182-be30630b8c3c.png") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--text);
+      position: relative;
+    }
 
-        @keyframes shine { to { background-position: 200% center; } }
-        @keyframes borderPulse { from { box-shadow: 0 0 10px var(--glass); } to { box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); } }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
 
-        .scroll-down {
-            position: absolute;
-            bottom: 40px;
-            font-size: 2rem;
-            color: var(--gold);
-            animation: bounce 2s infinite;
-            cursor: pointer;
-            z-index: 10;
-        }
+    .hero p {
+      letter-spacing: 2px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
 
-        /* --- RSVP FORM (GLASSMORPHISM) --- */
-        .rsvp-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 20px;
-            position: relative;
-        }
+    .scroll {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 2px;
+      opacity: 0.8;
+    }
 
-        .form-container {
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            padding: 50px 40px;
-            border-radius: 4px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            transform: translateY(50px);
-            opacity: 0;
-            transition: all 1s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .form-container.visible { transform: translateY(0); opacity: 1; }
+    /* ---------------- SECTIONS ---------------- */
+    section {
+      padding: 100px 20px;
+      text-align: center;
+    }
 
-        /* Golden corner borders for the form */
-        .form-container::before, .form-container::after {
-            content: ''; position: absolute; width: 30px; height: 30px;
-            border: 2px solid var(--gold); transition: 0.5s;
-        }
-        .form-container::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
-        .form-container::after { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
-        .form-container:hover::before, .form-container:hover::after { width: 95%; height: 95%; }
+    .sage {
+      background: var(--sage);
+      color: white;
+    }
 
-        input, select, textarea {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            margin: 10px 0;
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            transition: 0.3s;
-            outline: none;
-        }
+    section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
 
-        input:focus, select:focus, textarea:focus {
-            background: rgba(255,255,255,0.1);
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
+    .date {
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
 
-        select option { background: var(--black); color: white; }
+    section p {
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.8;
+      font-size: 16px;
+    }
 
-        button {
-            background: linear-gradient(45deg, var(--gold-dark), var(--gold));
-            color: var(--black);
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            padding: 15px 40px;
-            margin-top: 20px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: 0.3s;
-            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-        }
+    /* ---------------- RSVP ---------------- */
+    .rsvp-box {
+      max-width: 500px;
+      margin: auto;
+      background: rgba(255,255,255,0.15);
+      padding: 40px;
+      border-radius: 6px;
+      backdrop-filter: blur(10px);
+    }
 
-        button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
-            background: linear-gradient(45deg, var(--gold), white);
-        }
+    .rsvp-box input,
+    .rsvp-box select {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border: none;
+      font-size: 14px;
+    }
 
-        /* --- SUCCESS MESSAGE --- */
-        #success-msg h3 { font-size: 1.5rem; color: var(--gold); margin-bottom: 10px; }
-        .success-box { border: 1px solid var(--gold); padding: 20px; margin-top: 20px; animation: fadeIn 1s; }
+    .rsvp-box button {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      border: none;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-        /* --- FOOTER --- */
-        footer { padding: 40px; text-align: center; font-size: 0.8rem; color: #666; letter-spacing: 2px; }
+    footer {
+      padding: 60px 20px;
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+    }
 
-        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            .hero-border { padding: 20px; }
-            .form-container:hover::before, .form-container:hover::after { width: 30px; height: 30px; } /* Disable border animation on mobile */
-        }
-    </style>
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 44px; }
+      section { padding: 70px 20px; }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="bg-gradient"></div>
-    <div class="gold-dust"></div>
-    
-    <div class="floating-notes" id="notes-container"></div>
+  <!-- NAV -->
+  <div class="nav-toggle" onclick="toggleNav()">☰</div>
 
-    <section class="hero">
-        <div class="hero-border">
-            <p>Save The Date</p>
-            <h1>Ni <span class="cursive">x</span> Ni</h1>
-            <p>DECEMBER 12 • 2026</p>
-        </div>
-        <div class="scroll-down" onclick="document.getElementById('rsvp').scrollIntoView({behavior: 'smooth'})">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
+  <nav class="nav" id="nav">
+    <a href="#how">How We Met</a>
+    <a href="#proposal">The Proposal</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#rsvp">RSVP</a>
+  </nav>
 
-    <section id="rsvp" class="rsvp-section">
-        <div class="form-container" id="form-card">
-            <h2 style="margin-bottom: 10px;">The Celebration</h2>
-            <p style="color: #aaa; margin-bottom: 30px; font-size: 0.9rem;">JOIN US FOR A NIGHT OF JAZZ & JOY</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1>Ni x Ni</h1>
+      <p>DECEMBER 12, 2026</p>
+    </div>
+    <div class="scroll">SCROLL DOWN</div>
+  </section>
 
-            <div class="form-box">
-                <form name="submit-to-google-sheet">
-                    <input name="Name" type="text" placeholder="YOUR NAME" required autocomplete="off">
-                    <input name="Email" type="email" placeholder="YOUR EMAIL" required autocomplete="off">
-                    
-                    <select name="Attending" required>
-                        <option value="" disabled selected>WILL YOU ATTEND?</option>
-                        <option value="Yes">YES, WITH BELLS ON</option>
-                        <option value="No">NO, SPIRITUALLY PRESENT</option>
-                    </select>
+  <!-- HOW WE MET -->
+  <section id="how" class="sage">
+    <h2>How We Met</h2>
+    <div class="date">04.04.2015</div>
+    <p>
+      We met during our college years, became friends first, and slowly realized
+      that life felt better together. Five years, many journeys, and countless memories later —
+      here we are.
+    </p>
+  </section>
 
-                    <input name="Guests" type="number" placeholder="TOTAL GUESTS" min="1" value="1">
-                    <textarea name="Message" placeholder="A NOTE FOR THE COUPLE..." rows="3"></textarea>
-                    
-                    <button type="submit">Send RSVP</button>
-                </form>
+  <!-- PROPOSAL -->
+  <section id="proposal">
+    <h2>The Proposal</h2>
+    <div class="date">06.24.2020</div>
+    <p>
+      On a quiet walk back through familiar places, a question was asked, a knee was bent,
+      and a new chapter began.
+    </p>
+  </section>
 
-                <div id="loading-msg" class="hidden" style="margin-top:20px; color: var(--gold); letter-spacing: 2px;">
-                    <i class="fas fa-circle-notch fa-spin"></i> SENDING LOVE...
-                </div>
+  <!-- RSVP -->
+  <section id="rsvp" class="sage">
+    <h2>RSVP</h2>
+    <div class="rsvp-box">
+      <form name="submit-to-google-sheet">
+        <input name="Name" placeholder="Your Name" required />
+        <input name="Email" type="email" placeholder="Your Email" required />
+        <select name="Attending" required>
+          <option value="">Will you attend?</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+        <button type="submit">Confirm</button>
+      </form>
+    </div>
+  </section>
 
-                <div id="success-msg" class="hidden success-box">
-                    <h3><i class="fas fa-glass-cheers"></i> CONFIRMED</h3>
-                    <p>We can't wait to see you.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <footer>
+    Made with love • Ni & Ni
+  </footer>
 
-    <footer>
-        <p>NIKHIL & NIYETI • EST 2026</p>
-    </footer>
+  <script>
+    const nav = document.getElementById('nav');
+    function toggleNav() {
+      nav.classList.toggle('open');
+    }
+  </script>
 
-    <script>
-        // --- CONFIGURATION ---
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbx9cbevZyqf368wxbH5zTE-ywxcL7tZxmpLoSpD63vzfArq-Rg8NusXT2z41n59n-GL/exec'; 
-        // ---------------------
-
-        const form = document.forms['submit-to-google-sheet'];
-        const successMsg = document.getElementById('success-msg');
-        const loadingMsg = document.getElementById('loading-msg');
-        const formCard = document.getElementById('form-card');
-
-        // 1. Scroll Animation Logic
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        observer.observe(formCard);
-
-        // 2. Form Submit Logic with Confetti
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            loadingMsg.classList.remove('hidden');
-            form.style.display = 'none';
-
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                .then(response => {
-                    loadingMsg.classList.add('hidden');
-                    successMsg.classList.remove('hidden');
-                    
-                    // TRIGGER CONFETTI
-                    var duration = 3000;
-                    var end = Date.now() + duration;
-
-                    (function frame() {
-                        confetti({
-                            particleCount: 5,
-                            angle: 60,
-                            spread: 55,
-                            origin: { x: 0 },
-                            colors: ['#d4af37', '#ffffff']
-                        });
-                        confetti({
-                            particleCount: 5,
-                            angle: 120,
-                            spread: 55,
-                            origin: { x: 1 },
-                            colors: ['#d4af37', '#ffffff']
-                        });
-
-                        if (Date.now() < end) {
-                            requestAnimationFrame(frame);
-                        }
-                    }());
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    loadingMsg.classList.add('hidden');
-                    form.style.display = 'block';
-                    alert("Something went wrong. Please try again.");
-                });
-        });
-
-        // 3. Generate Floating Music Notes (Jazz BS)
-        const notesContainer = document.getElementById('notes-container');
-        const musicIcons = ['fa-music', 'fa-guitar', 'fa-drum', 'fa-microphone-alt'];
-        
-        for(let i=0; i<15; i++) {
-            let note = document.createElement('i');
-            note.classList.add('fas', musicIcons[Math.floor(Math.random() * musicIcons.length)], 'note');
-            note.style.left = Math.random() * 100 + 'vw';
-            note.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            note.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            note.style.animationDelay = Math.random() * 5 + 's';
-            notesContainer.appendChild(note);
-        }
-    </script>
 </body>
 </html>
